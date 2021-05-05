@@ -19,6 +19,11 @@ class Header extends Component {
     // Bindings Methods
     this.switchTheme = this.switchTheme.bind(this);
     this.switchThemeTo = this.switchThemeTo.bind(this);
+    this.homeClicked = this.homeClicked.bind(this);
+  }
+  homeClicked()
+  {
+    window.location.href = "/";
   }
   componentDidMount() {
     let theme = localStorage.getItem("theme");
@@ -66,7 +71,7 @@ class Header extends Component {
   render() {
     return (
       <header id="header">
-        <p>{this.props.title}</p>
+        <p onClick={this.homeClicked}>{this.props.title}</p>
         <Button
           onClick={this.switchTheme}
           iconClass={this.state.icon}

@@ -47,6 +47,7 @@ class Details extends Component {
       languages,
       borders,
       flag;
+    document.title = "Where in the world? | " + name;
     Axios.get("https://restcountries.eu/rest/v2/all").then((response) => {
       let countries = response.data.filter(
         (country) => country.name.toLowerCase() === name

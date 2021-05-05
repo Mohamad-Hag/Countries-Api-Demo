@@ -11,6 +11,11 @@
 {
     font-weight: var(--extrabold-fw);
     font-size: var(--large-fs);
+    cursor: pointer;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
 }
 #header button
 {
