@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import SearchResult from "../fixtures/SearchResult";
 import "./styles/SearchBox.css";
 import Axios from "axios";
+import { NavLink } from "react-router-dom";
 
 class SearchBox extends Component {
   constructor(props) {
@@ -17,6 +18,8 @@ class SearchBox extends Component {
           </div>
         </div>
       ),
+      searchResultIndex: -1,
+      numberOfResults: 0,
     };
 
     // Refs
@@ -26,14 +29,74 @@ class SearchBox extends Component {
     this.inputBlured = this.inputBlured.bind(this);
     this.inputChanged = this.inputChanged.bind(this);
     this.searchResultClicked = this.searchResultClicked.bind(this);
+    this.inputKeyUp = this.inputKeyUp.bind(this);
+    this.clickSearchResult = this.clickSearchResult.bind(this);
   }
-  searchResultClicked(event)
+  inputKeyUp(event) {        
+    let result = document.querySelectorAll(".search-result");
+    let boxShadow = "inset 0 0 0 30px #00000015";    
+    if (this.state.numberOfResults === 0) return;
+    result.forEach((r) => {
+      r.style.removeProperty("box-shadow");
+    });
+    // Up Key
+    if (event.keyCode === 38) {      
+      if (this.state.searchResultIndex > 0) {
+        this.setState(
+          { searchResultIndex: this.state.searchResultIndex - 1 },
+          () => {
+            result[this.state.searchResultIndex].style.boxShadow =
+              boxShadow;
+          }
+        );
+      } else {
+        this.setState(
+          { searchResultIndex: this.state.numberOfResults - 1 },
+          () => {
+            result[this.state.searchResultIndex].style.boxShadow =
+              boxShadow;
+          }
+        );
+      }
+    }
+    // Down Key
+    else if (event.keyCode === 40) {
+      if (this.state.searchResultIndex < this.state.numberOfResults - 1) {
+        this.setState(
+          { searchResultIndex: this.state.searchResultIndex + 1 },
+          () => {
+            result[this.state.searchResultIndex].style.boxShadow =
+              boxShadow;
+          }
+        );
+      } else {
+        this.setState(
+          { searchResultIndex: 0 },
+          () => {
+            result[this.state.searchResultIndex].style.boxShadow =
+              boxShadow;
+          }
+        );
+      }
+    }
+    else if (event.keyCode === 13 && this.state.numberOfResults !== 0 && this.state.searchResultIndex !== -1)
+    {            
+      let name = result[this.state.searchResultIndex].querySelector(".search-result-country div").innerText;      
+      window.location.href = `/details/${name}`;
+    }
+  }
+  clickSearchResult(result)
   {
-    let name = event.currentTarget.querySelector(".search-result-country div").innerText;
+    let name = result.querySelector(".search-result-country div")
+      .innerText;
     window.location.href = `/details/${name}`;
+  }
+  searchResultClicked(event) {    
+    this.clickSearchResult(event.currentTarget);
   }
   inputChanged(event) {
     let value = event.target.value.trim().toLowerCase();
+    this.setState({ searchResultIndex: -1 });
     if (value === "") {
       this.setState({
         results: (
@@ -55,6 +118,7 @@ class SearchBox extends Component {
             country.name.trim().toLowerCase().includes(value)
           )
           .slice(0, 10);
+        this.setState({ numberOfResults: filteredCountries.length });
         if (filteredCountries.length === 0) {
           this.setState({
             results: (
@@ -85,7 +149,13 @@ class SearchBox extends Component {
                   />
                 );
                 let flag = country.flag;
-                return <SearchResult onClick={this.searchResultClicked} flag={flag} country={name} />;
+                return (
+                  <SearchResult
+                    onClick={this.searchResultClicked}
+                    flag={flag}
+                    country={name}
+                  />
+                );
               })}
             </div>
           ),
@@ -109,6 +179,7 @@ class SearchBox extends Component {
           <input
             onInput={this.inputChanged}
             onBlur={this.inputBlured}
+            onKeyUp={this.inputKeyUp}
             type={this.props.inputType}
             className="search-box-in"
             placeholder={this.props.placeholder}
