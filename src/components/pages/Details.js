@@ -27,6 +27,22 @@ class Details extends Component {
 
     // Bindings Methods
     this.flagLoaded = this.flagLoaded.bind(this);
+    this.openFlag = this.openFlag.bind(this);
+    this.closeFlag = this.closeFlag.bind(this);
+  }
+  openFlag(event)
+  {
+    let target = event.currentTarget;
+    let parent = target.parentElement;
+    parent.setAttribute("id", "details-flag-open");
+  }
+  closeFlag(event)
+  {
+    let target = event.target;
+    if (target.getAttribute("id") === "details-flag-open")
+    {      
+      target.setAttribute("id", "details-flag");
+    }      
   }
   flagLoaded(event) {
     let target = event.currentTarget.parentElement;
@@ -118,8 +134,8 @@ class Details extends Component {
           />
         </div>
         <div id="details-body">
-          <div id="details-flag">
-            <img alt="" src={this.state.flag} onLoad={this.flagLoaded} />
+          <div id="details-flag" onClick={this.closeFlag}>
+            <img alt="" src={this.state.flag} onLoad={this.flagLoaded} onClick={this.openFlag}/>
             <div id="details-flag-loader-container">
               <div id="details-flag-loader"></div>
             </div>
