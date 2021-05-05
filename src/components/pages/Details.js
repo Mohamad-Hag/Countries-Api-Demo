@@ -70,12 +70,13 @@ class Details extends Component {
         })
         .toString();
       borders = countries[0].borders.map((border) => {
+        border = response.data.filter(c => c.alpha3Code === border)[0].name;        
         return (
           <label
             onClick={(event) => {
               let value = event.currentTarget.innerText;
               let count = response.data.filter(
-                (country) => country.alpha3Code === value
+                (country) => country.name === value
               );
               window.location.href = `/details/${count[0].name.toLowerCase()}`;
             }}
@@ -84,6 +85,7 @@ class Details extends Component {
           </label>
         );
       });
+      if (borders.length === 0) borders = <span>&nbsp;No Borders</span>;
       this.setState({ name: name });
       this.setState({ nativeName: nativeName });
       this.setState({ region: region });
@@ -104,7 +106,7 @@ class Details extends Component {
           <Button
             text="Back"
             onClick={() => {
-              window.location.href = "/";
+              window.history.back();
             }}
             iconClass="fa fa-arrow-left"
           />
