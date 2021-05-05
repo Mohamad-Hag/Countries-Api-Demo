@@ -35,8 +35,9 @@ class Details extends Component {
       loader.classList.add("details-flag-loader-container-none");
     }, 500);
   }
-  componentDidMount() {
-    let name = this.props.match.params.name.toLowerCase();
+  componentDidMount() {        
+    let params = this.props.match.params;        
+    let name = params.name.toLowerCase();
     let population,
       nativeName,
       region,
@@ -52,6 +53,10 @@ class Details extends Component {
       let countries = response.data.filter(
         (country) => country.name.toLowerCase() === name
       );
+      if (countries[0] === undefined) {
+        window.location.replace("/");
+        return;
+      }
       name = countries[0].name;
       nativeName = countries[0].nativeName;
       region = countries[0].region;
