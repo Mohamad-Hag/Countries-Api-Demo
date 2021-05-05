@@ -29,32 +29,30 @@ class SearchBox extends Component {
     this.inputBlured = this.inputBlured.bind(this);
     this.inputChanged = this.inputChanged.bind(this);
     this.searchResultClicked = this.searchResultClicked.bind(this);
-    this.inputKeyUp = this.inputKeyUp.bind(this);
+    this.inputKeyDown = this.inputKeyDown.bind(this);
     this.clickSearchResult = this.clickSearchResult.bind(this);
   }
-  inputKeyUp(event) {        
+  inputKeyDown(event) {
     let result = document.querySelectorAll(".search-result");
-    let boxShadow = "inset 0 0 0 30px #00000015";    
+    let boxShadow = "inset 0 0 0 30px #00000015";
     if (this.state.numberOfResults === 0) return;
     result.forEach((r) => {
       r.style.removeProperty("box-shadow");
     });
     // Up Key
-    if (event.keyCode === 38) {      
+    if (event.keyCode === 38) {
       if (this.state.searchResultIndex > 0) {
         this.setState(
           { searchResultIndex: this.state.searchResultIndex - 1 },
           () => {
-            result[this.state.searchResultIndex].style.boxShadow =
-              boxShadow;
+            result[this.state.searchResultIndex].style.boxShadow = boxShadow;
           }
         );
       } else {
         this.setState(
           { searchResultIndex: this.state.numberOfResults - 1 },
           () => {
-            result[this.state.searchResultIndex].style.boxShadow =
-              boxShadow;
+            result[this.state.searchResultIndex].style.boxShadow = boxShadow;
           }
         );
       }
@@ -65,33 +63,30 @@ class SearchBox extends Component {
         this.setState(
           { searchResultIndex: this.state.searchResultIndex + 1 },
           () => {
-            result[this.state.searchResultIndex].style.boxShadow =
-              boxShadow;
+            result[this.state.searchResultIndex].style.boxShadow = boxShadow;
           }
         );
       } else {
-        this.setState(
-          { searchResultIndex: 0 },
-          () => {
-            result[this.state.searchResultIndex].style.boxShadow =
-              boxShadow;
-          }
-        );
+        this.setState({ searchResultIndex: 0 }, () => {
+          result[this.state.searchResultIndex].style.boxShadow = boxShadow;
+        });
       }
-    }
-    else if (event.keyCode === 13 && this.state.numberOfResults !== 0 && this.state.searchResultIndex !== -1)
-    {            
-      let name = result[this.state.searchResultIndex].querySelector(".search-result-country div").innerText;      
+    } else if (
+      event.keyCode === 13 &&
+      this.state.numberOfResults !== 0 &&
+      this.state.searchResultIndex !== -1
+    ) {
+      let name = result[this.state.searchResultIndex].querySelector(
+        ".search-result-country div"
+      ).innerText;
       window.location.href = `/details/${name}`;
     }
   }
-  clickSearchResult(result)
-  {
-    let name = result.querySelector(".search-result-country div")
-      .innerText;
+  clickSearchResult(result) {
+    let name = result.querySelector(".search-result-country div").innerText;
     window.location.href = `/details/${name}`;
   }
-  searchResultClicked(event) {    
+  searchResultClicked(event) {
     this.clickSearchResult(event.currentTarget);
   }
   inputChanged(event) {
@@ -179,7 +174,7 @@ class SearchBox extends Component {
           <input
             onInput={this.inputChanged}
             onBlur={this.inputBlured}
-            onKeyUp={this.inputKeyUp}
+            onKeyDown={this.inputKeyDown}
             type={this.props.inputType}
             className="search-box-in"
             placeholder={this.props.placeholder}
