@@ -1,0 +1,105 @@
+* 
+{
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+  text-decoration: none;
+  outline: none;
+  font-family: var(--nunito-ff);
+  color: var(--lm-txt-cr);
+  -webkit-tap-highlight-color: transparent;  
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+:root
+{
+  /* Colors */
+  /** Neutral **/
+  --dm-elements-cr: hsl(209, 23%, 22%); /* Dark Blue */
+  --dm-bg: hsl(207, 26%, 17%); /* Very Dark Blue */
+  --lm-txt-cr :hsl(200, 15%, 8%); /* Very Dark Blue */
+  --lm-input-cr: hsl(0, 0%, 52%); /* Dark Gray */
+  --lm-bg: hsl(0, 0%, 98%); /* Very Light Gray */
+  --lm-dm-elements: hsl(0, 0%, 100%); /* White */
+  --lm-dark-cr: hsl(0, 0%, 80%);
+  --highlighter-cr: hsla(60, 100%, 50%, 0.502);
+  
+  /* Font Weights */
+  --light-fw: 300;
+  --semibold-fw: 600;
+  --extrabold-fw: 800;
+
+  /* Font Families */
+  --nunito-ff: 'Nunito Sans', sans-serif;
+
+  /* Font Sizes */
+  --xxsmall-fs: xx-small;
+  --xsmall-fs: x-small;
+  --small-fs: small;
+  --smaller-fs: smaller;
+  --medium-fs: medium;
+  --large-fs: large;
+  --xlarge-fs: x-large;
+  --xxlarge-fs: xx-large;
+  --larger-fs: larger;
+  --xxxlarge: 50px;
+
+  /* Box Shadows */
+  --main-bs: 0 0 5px 3px #00000015;
+  --header-bs: 0 2px 5px 0 #00000015;
+  --input-bs: 0 0 30px 3px #00000010;
+  --input-s-bs: 0 10px 20px 0 #00000010;
+  --card-bs: 0 0 10px 3px #00000010;
+}
+html, body
+{
+
+}
+html
+{
+  scroll-behavior: smooth;
+}
+body
+{
+  background-color: var(--lm-bg);
+}
+button, a, img, ::placeholder, ::-webkit-input-placeholder
+{
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -moz-user-select: none;
+}
+img
+{
+  -webkit-user-drag: none;
+}
+button, a, i
+{
+  color: var(--lm-txt-cr);
+}
+button, a
+{  
+  cursor: pointer;
+}
+::placeholder
+{
+  color: var(--lm-input-cr);
+}
+::-webkit-scrollbar
+{
+  width: 10px;
+}
+::-webkit-scrollbar-button
+{
+  
+}
+::-webkit-scrollbar-thumb
+{
+  background: var(--lm-dark-cr);
+  width: 40px;
+}
+::-webkit-scrollbar-track
+{
+  background: none;  
+}

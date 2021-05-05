@@ -1,0 +1,29 @@
+.search-result
+{
+    display: flex;
+    align-items: center;    
+    gap: 10px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    border: 0 solid var(--lm-bg);
+    border-bottom-width: 1px;
+}
+.search-result:hover
+{
+    background-color: var(--lm-bg);
+}
+.search-result:focus-within
+{
+    outline: 1px dotted;
+}
+.search-result-flag
+{
+    height: 50px;
+    width: 80px;
+    border: none;    
+    object-fit: cover;
+} 
+.search-result-country
+{
+    
+}
