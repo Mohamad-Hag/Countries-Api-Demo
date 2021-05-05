@@ -26,6 +26,14 @@ class Details extends Component {
     };
 
     // Bindings Methods
+    this.flagLoaded = this.flagLoaded.bind(this);
+  }
+  flagLoaded(event) {
+    let target = event.currentTarget.parentElement;
+    let loader = target.querySelector("#details-flag-loader-container");
+    setTimeout(() => {
+      loader.classList.add("details-flag-loader-container-none");
+    }, 500);
   }
   componentDidMount() {
     let name = this.props.match.params.name.toLowerCase();
@@ -62,11 +70,19 @@ class Details extends Component {
         })
         .toString();
       borders = countries[0].borders.map((border) => {
-          return <label onClick={(event) => {
-            let value = event.currentTarget.innerText;
-            let count = response.data.filter((country) => country.alpha3Code === value);
-            window.location.href = `/details/${count[0].name.toLowerCase()}`;
-          }}>{border}</label>
+        return (
+          <label
+            onClick={(event) => {
+              let value = event.currentTarget.innerText;
+              let count = response.data.filter(
+                (country) => country.alpha3Code === value
+              );
+              window.location.href = `/details/${count[0].name.toLowerCase()}`;
+            }}
+          >
+            {border}
+          </label>
+        );
       });
       this.setState({ name: name });
       this.setState({ nativeName: nativeName });
@@ -94,7 +110,12 @@ class Details extends Component {
           />
         </div>
         <div id="details-body">
-          <div id="details-flag" style={{backgroundImage: `url(${this.state.flag})`}}></div>
+          <div id="details-flag">
+            <img alt="" src={this.state.flag} onLoad={this.flagLoaded} />
+            <div id="details-flag-loader-container">
+              <div id="details-flag-loader"></div>
+            </div>
+          </div>
           <div id="details-inner">
             <div id="details-name">{this.state.name}</div>
             <div id="details-descriptions">

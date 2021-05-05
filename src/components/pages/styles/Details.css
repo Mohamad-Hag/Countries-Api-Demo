@@ -17,6 +17,50 @@
     opacity: 0;
     transform: translateX(-50px);
     box-shadow: var(--card-bs);
+    overflow: hidden;
+    position: relative;
+}
+#details-flag img
+{
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+#details-flag-loader-container
+{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--lm-dm-elements);
+    display: flex;
+    align-items: center;
+    justify-content: center;    
+}
+#details-flag-loader
+{
+    height: 70px;
+    width: 70px;
+    border: 5px solid var(--lm-input-cr);
+    border-bottom-color: transparent;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: flag-loader-animate .8s infinite ease-in;   
+}
+.details-flag-loader-container-none
+{
+    transition: .3s;
+    visibility: hidden;
+    opacity: 0;
+}
+@keyframes flag-loader-animate 
+{
+    to
+    {
+        transform: rotate(360deg)
+    }    
 }
 @keyframes flag-animation 
 {
