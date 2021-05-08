@@ -31,16 +31,30 @@ class SearchBox extends Component {
     this.searchResultClicked = this.searchResultClicked.bind(this);
     this.inputKeyDown = this.inputKeyDown.bind(this);
     this.clickSearchResult = this.clickSearchResult.bind(this);
+    this.moveCursorToEnd = this.moveCursorToEnd.bind(this);
   }
-  inputKeyDown(event) {
+  moveCursorToEnd(el) {
+    if (typeof el.selectionStart == "number") {
+      el.selectionStart = el.selectionEnd = el.value.length;
+    } else if (typeof el.createTextRange != "undefined") {
+      el.focus();
+      var range = el.createTextRange();
+      range.collapse(false);
+      range.select();
+    }
+  }
+  inputKeyDown(event) {    
     let result = document.querySelectorAll(".search-result");
     let boxShadow = "inset 0 0 0 30px #00000015";
+    let rootRef = this.ref.current;
+    let searchInput = rootRef.querySelector(".search-box-in");
     if (this.state.numberOfResults === 0) return;
     result.forEach((r) => {
       r.style.removeProperty("box-shadow");
-    });
+    });    
     // Up Key
     if (event.keyCode === 38) {
+      event.preventDefault();
       if (this.state.searchResultIndex > 0) {
         this.setState(
           { searchResultIndex: this.state.searchResultIndex - 1 },
@@ -168,6 +182,7 @@ class SearchBox extends Component {
         tabIndex="0"
         id={this.props.id}
         style={this.props.style}
+        ref={this.ref}
       >
         <div className="search-box-in-container">
           <i className="fa fa-search"></i>
