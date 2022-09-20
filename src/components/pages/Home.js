@@ -18,7 +18,7 @@ class Home extends Component {
     this.state = {
       countries: null,
       currentCountries: null,
-      selectedFilter: null,
+      selectedFilter: null,      
     };
 
     // Bindings Methods
@@ -38,7 +38,7 @@ class Home extends Component {
     setTimeout(() => {}, 500);
     document.querySelector("#loading-sign").style.display = "none";
     this.setState({ selectedFilter: value });
-    Axios.get("https://restcountries.eu/rest/v2/all").then((response) => {
+    Axios.get("https://restcountries.com/v3.1/all").then((response) => {
       let countries_ = response.data;
       let filteredCountries = countries_.filter(
         (country) => country.region === value
@@ -46,9 +46,10 @@ class Home extends Component {
       this.setState({ countries: filteredCountries }, () => {
         ReactDOM.render(
           <div id="home-countries">
-            {this.state.countries.map((country) => {
+            {this.state.countries.map((country, i) => {
               return (
                 <CountryCard
+                  key={i.toString()}
                   country={country.name}
                   population={country.population}
                   region={country.region}
@@ -64,7 +65,7 @@ class Home extends Component {
     });
   }
   componentDidMount() {
-    Axios.get("https://restcountries.eu/rest/v2/all").then((response) => {
+    Axios.get("https://restcountries.com/v3.1/all").then((response) => {
       this.lastCardIndex = 8;
       let countries = response.data;
       this.setState({ currentCountries: countries });
@@ -72,14 +73,15 @@ class Home extends Component {
       this.setState({ countries: countries_ }, () => {
         ReactDOM.render(
           <div id="home-countries">
-            {this.state.countries.map((country) => {
+            {this.state.countries.map((country, i) => {
               return (
                 <CountryCard
-                  country={country.name}
+                  key={i.toString()}
+                  country={country.name.common}
                   population={country.population}
                   region={country.region}
                   capital={country.capital}
-                  flag={country.flag}
+                  flag={country.flags.svg}
                 />
               );
             })}
@@ -102,14 +104,15 @@ class Home extends Component {
           this.setState({ countries: countries }, () => {
             ReactDOM.render(
               <div id="home-countries">
-                {this.state.countries.map((country) => {
+                {this.state.countries.map((country, i) => {
                   return (
                     <CountryCard
-                      country={country.name}
+                      key={i.toString()}
+                      country={country.name.common}
                       population={country.population}
                       region={country.region}
                       capital={country.capital}
-                      flag={country.flag}
+                      flag={country.flags.svg}
                     />
                   );
                 })}

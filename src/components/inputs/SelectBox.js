@@ -59,7 +59,13 @@ class SelectBox extends Component {
         </div>
         <div className="select-box-items">
           {this.props.items.map((item, i) => {
-            return <SelectBoxItem onClick={this.itemSelected} text={item} />;
+            return (
+              <SelectBoxItem
+                key={i.toString()}
+                onClick={this.itemSelected}
+                text={item}
+              />
+            );
           })}
         </div>
       </div>

@@ -58,66 +58,66 @@ class Details extends Component {
       nativeName,
       region,
       capital,
-      currencies,
+      // currencies,
       subRegion,
       topLevelDomain,
       languages,
       borders,
       flag;
     document.title = "Where in the world? | " + name;
-    Axios.get("https://restcountries.eu/rest/v2/all").then((response) => {
+    Axios.get("https://restcountries.com/v3.1/all").then((response) => {
       let countries = response.data.filter(
-        (country) => country.name.toLowerCase() === name
+        (country) => country.name.common.toLowerCase() === name
       );
       if (countries[0] === undefined) {
         window.location.replace("/");
         return;
       }
-      name = countries[0].name;
-      nativeName = countries[0].nativeName;
+      name = countries[0].name.official;
+      nativeName = countries[0].name.common;
       region = countries[0].region;
       population = countries[0].population;
       capital = countries[0].capital;
       subRegion = countries[0].subregion;
       topLevelDomain = countries[0].topLevelDomain;
-      flag = countries[0].flag;
-      currencies = countries[0].currencies
-        .map((currency) => {
-          return currency.code;
-        })
-        .toString();
-      languages = countries[0].languages
-        .map((language) => {
-          return language.name;
-        })
-        .toString();
-      borders = countries[0].borders.map((border) => {
-        border = response.data.filter(c => c.alpha3Code === border)[0].name;        
-        return (
-          <label
-            onClick={(event) => {
-              let value = event.currentTarget.innerText;
-              let count = response.data.filter(
-                (country) => country.name === value
-              );
-              window.location.href = `/details/${count[0].name.toLowerCase()}`;
-            }}
-          >
-            {border}
-          </label>
-        );
-      });
-      if (borders.length === 0) borders = <span>&nbsp;No Borders</span>;
+      flag = countries[0].flags.svg;
+      // currencies = countries[0].currencies
+      //   .map((currency) => {
+      //     return currency.code;
+      //   })
+      //   .toString();
+      // languages = countries[0].languages
+      //   .map((language) => {
+      //     return language.name;
+      //   })
+      //   .toString();
+      // borders = countries[0].borders.map((border) => {
+      //   border = response.data.filter(c => c.alpha3Code === border)[0].name;        
+      //   return (
+      //     <label
+      //       onClick={(event) => {
+      //         let value = event.currentTarget.innerText;
+      //         let count = response.data.filter(
+      //           (country) => country.name.common === value
+      //         );
+      //         window.location.href = `/details/${count[0].name.toLowerCase()}`;
+      //       }}
+      //     >
+      //       {border}
+      //     </label>
+      //   );
+      // });
+      // if (borders.length === 0) borders = <span>&nbsp;No Borders</span>;
       this.setState({ name: name });
       this.setState({ nativeName: nativeName });
       this.setState({ region: region });
       this.setState({ capital: capital });
-      this.setState({ currencies: currencies });
+      // this.setState({ currencies: currencies });
       this.setState({ population: population });
       this.setState({ subRegion: subRegion });
       this.setState({ topLevelDomain: topLevelDomain });
-      this.setState({ languages: languages });
-      this.setState({ borders: borders });
+      // this.setState({ languages: languages });
+      // this.setState({ borders: borders });
       this.setState({ flag: flag });
     });
   }
@@ -161,12 +161,12 @@ class Details extends Component {
               <p>
                 Top Level Domain: <span>{this.state.topLevelDomain}</span>
               </p>
-              <p>
+              {/* <p>
                 Currencies: <span>{this.state.currencies}</span>
-              </p>
-              <p>
+              </p> */}
+              {/* <p>
                 Languages: <span>{this.state.languages}</span>
-              </p>
+              </p> */}
             </div>
             <div id="details-borders">
               Border Countries: {this.state.borders}

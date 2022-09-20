@@ -33,6 +33,24 @@
         opacity: 0;
     }
 }
+.loader
+{
+    border: 3px solid var(--lm-input-cr);
+    border-left-color: transparent;
+    border-top-color: var(--lm-input-cr);
+    border-bottom-color: transparent;
+    border-right-color: var(--lm-input-cr);    
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    animation: loader-animate .5s infinite ease-in-out;
+}
+@keyframes loader-animate {
+    to
+    {
+        transform: rotate(360deg);
+    }
+}
 @media screen and (max-width: 800px)
 {
     #home-controls

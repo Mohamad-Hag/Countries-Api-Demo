@@ -20,6 +20,7 @@ class SearchBox extends Component {
       ),
       searchResultIndex: -1,
       numberOfResults: 0,
+      isLoading: false,
     };
 
     // Refs
@@ -43,7 +44,7 @@ class SearchBox extends Component {
       range.select();
     }
   }
-  inputKeyDown(event) {    
+  inputKeyDown(event) {
     let result = document.querySelectorAll(".search-result");
     let boxShadow = "inset 0 0 0 30px #00000015";
     let rootRef = this.ref.current;
@@ -51,7 +52,7 @@ class SearchBox extends Component {
     if (this.state.numberOfResults === 0) return;
     result.forEach((r) => {
       r.style.removeProperty("box-shadow");
-    });    
+    });
     // Up Key
     if (event.keyCode === 38) {
       event.preventDefault();
@@ -104,73 +105,79 @@ class SearchBox extends Component {
     this.clickSearchResult(event.currentTarget);
   }
   inputChanged(event) {
+    let emptyResults = (
+      <div className="search-results-container">
+        <div className="nothing-container">
+          <i className="fa fa-ban"></i>
+          <p>Nothing to show...</p>
+        </div>
+      </div>
+    );
     let value = event.target.value.trim().toLowerCase();
-    this.setState({ searchResultIndex: -1 });
-    if (value === "") {
-      this.setState({
-        results: (
-          <div className="search-results-container">
-            <div className="nothing-container">
-              <i className="fa fa-ban"></i>
-              <p>Nothing to show...</p>
-            </div>
-          </div>
-        ),
-      });
-      return;
-    }
-    Axios.get(`https://restcountries.eu/rest/v2/all`)
-      .then((response) => {
-        let countries = response.data;
-        let filteredCountries = countries
-          .filter((country) =>
-            country.name.trim().toLowerCase().includes(value)
-          )
-          .slice(0, 10);
-        this.setState({ numberOfResults: filteredCountries.length });
-        if (filteredCountries.length === 0) {
+    this.setState({ results: emptyResults }, () => {
+      this.setState({ searchResultIndex: -1 });
+      if (value === "") {
+        this.setState({
+          results: emptyResults,
+        });
+        return;
+      }
+      this.setState({ isLoading: true });
+      Axios.get(`https://restcountries.com/v3.1/all`)
+        .then((response) => {
+          this.setState({ isLoading: false });
+          let countries = response.data;
+          let filteredCountries = countries
+            .filter((country) =>
+              country.name.common.trim().toLowerCase().includes(value)
+            )
+            .slice(0, 6);
+          this.setState({ numberOfResults: filteredCountries.length });
+          if (filteredCountries.length === 0) {
+            this.setState({
+              results: (
+                <div className="search-results-container">
+                  <div className="nothing-container">
+                    <i className="fa fa-ban"></i>
+                    <p>Nothing to show...</p>
+                  </div>
+                </div>
+              ),
+            });
+            return;
+          }
           this.setState({
             results: (
               <div className="search-results-container">
-                <div className="nothing-container">
-                  <i className="fa fa-ban"></i>
-                  <p>Nothing to show...</p>
-                </div>
+                {filteredCountries.map((country, i) => {
+                  let name = (
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: country.name.common
+                          .toLowerCase()
+                          .replaceAll(
+                            value,
+                            `<span style="background: var(--highlighter-cr)">${value}</span>`
+                          ),
+                      }}
+                    />
+                  );
+                  let flag = country.flags.svg;
+                  return (
+                    <SearchResult
+                      key={i.toString()}
+                      onClick={this.searchResultClicked}
+                      flag={flag}
+                      country={name}
+                    />
+                  );
+                })}
               </div>
             ),
           });
-          return;
-        }
-        this.setState({
-          results: (
-            <div className="search-results-container">
-              {filteredCountries.map((country) => {
-                let name = (
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: country.name
-                        .toLowerCase()
-                        .replaceAll(
-                          value,
-                          `<span style="background: var(--highlighter-cr)">${value}</span>`
-                        ),
-                    }}
-                  />
-                );
-                let flag = country.flag;
-                return (
-                  <SearchResult
-                    onClick={this.searchResultClicked}
-                    flag={flag}
-                    country={name}
-                  />
-                );
-              })}
-            </div>
-          ),
-        });
-      })
-      .catch((error) => {});
+        })
+        .catch((error) => {});
+    });
   }
   inputBlured(event) {}
   componentDidMount() {}
@@ -185,7 +192,11 @@ class SearchBox extends Component {
         ref={this.ref}
       >
         <div className="search-box-in-container">
-          <i className="fa fa-search"></i>
+          {this.state.isLoading ? (
+            <div className="loader"></div>
+          ) : (
+            <i className="fa fa-search"></i>
+          )}
           <input
             onInput={this.inputChanged}
             onBlur={this.inputBlured}
